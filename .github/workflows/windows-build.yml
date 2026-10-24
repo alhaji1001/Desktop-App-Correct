@@ -1,0 +1,38 @@
+name: Windows Desktop Build
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      # Do not enable setup-node's npm cache unless package-lock.json is committed.
+      # This project currently has no lockfile, so caching would fail before install.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies and create lockfile
+        run: npm install --no-audit --no-fund
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build Windows installer
+        run: npm run dist
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: GDSS-Dutse-Windows-Installer
+          path: release/*.exe
+          if-no-files-found: error

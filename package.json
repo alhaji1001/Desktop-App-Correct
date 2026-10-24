@@ -1,0 +1,80 @@
+{
+  "name": "gdss-dutse-results",
+  "productName": "GDSS Dutse Results",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline school results management for GDSS Dutse",
+  "main": "dist-electron/electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "build": "npm run build:ui && npm run build:electron",
+    "build:ui": "vite build",
+    "build:electron": "tsc -p electron/tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dist": "npm run build && electron-builder --win nsis --x64 --publish never",
+    "dist:dir": "npm run build && electron-builder --win --dir"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "exceljs": "^4.4.0",
+    "papaparse": "^5.5.3",
+    "pdfkit": "^0.17.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "@types/papaparse": "^5.3.16",
+    "@types/pdfkit": "^0.17.2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^9.2.0",
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4",
+    "wait-on": "^8.0.3",
+    "@types/better-sqlite3": "^7.6.13"
+  },
+  "build": {
+    "appId": "com.gdss.dutse.desktop",
+    "productName": "GDSS Dutse Results",
+    "asar": true,
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": ["dist/**/*", "dist-electron/**/*", "package.json"],
+    "extraMetadata": {
+      "main": "dist-electron/electron/main.js"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "deleteAppDataOnUninstall": false,
+      "shortcutName": "GDSS Dutse Results"
+    },
+    "extraResources": [
+      {
+        "from": "build/report-assets",
+        "to": "report-assets",
+        "filter": ["**/*"]
+      }
+    ],
+    "artifactName": "${productName} Setup ${version}.${ext}"
+  }
+}

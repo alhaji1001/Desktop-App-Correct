@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "outDir": "../dist-electron",
+    "rootDir": "..",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "electron"
+    ]
+  },
+  "include": [
+    "main.ts",
+    "preload.ts",
+    "pdfWorker.ts",
+    "../src/db/**/*.ts",
+    "../src/core/**/*.ts",
+    "../src/pdf/**/*.ts"
+  ]
+}
